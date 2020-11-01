@@ -7,6 +7,9 @@
 Light tap adherent test runner.
 
 ## Installation
+```bash
+npm install --save basictap
+```
 
 ## Example
 ```javascript
