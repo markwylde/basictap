@@ -1,0 +1,27 @@
+{
+  "name": "basictap",
+  "version": "1.0.0",
+  "description": "Extremly light tap adherent test runner",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "tape": "^5.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markwylde/basictap.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/markwylde/basictap/issues"
+  },
+  "homepage": "https://github.com/markwylde/basictap#readme"
+}
