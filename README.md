@@ -6,6 +6,10 @@
 
 Light tap adherent test runner.
 
+- Asyncronous tests run in parallel
+- Outputs tap syntax
+- Uses built in node `assert` library
+
 ## Installation
 ```bash
 npm install --save basictap
