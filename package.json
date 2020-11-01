@@ -1,6 +1,6 @@
 {
   "name": "basictap",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Light tap adherent test runner",
   "main": "index.js",
   "directories": {
