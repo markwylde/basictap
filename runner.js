@@ -46,7 +46,14 @@ function runner (tests) {
             fails = fails + 1;
             totalFailed = totalFailed + 1;
             log(`not ok ${totalAssertions} ${args[argumentCount] || defaultComment}`);
-            log(indent(4, '---\n' + error.stack));
+            log(indent(3, '---'));
+            log(indent(5, 'operator: ' + name));
+            log(indent(5, 'expected: ' + args[1]));
+            log(indent(5, 'actual:   ' + args[0]));
+            log(indent(5, 'message:  ' + JSON.stringify(error.message)));
+            log(indent(5, 'stack: |-'));
+            log(indent(8, error.stack));
+            log(indent(3, '...'));
           }
         };
       }
@@ -57,7 +64,6 @@ function runner (tests) {
         },
 
         fail: createAssert('fail', 0, 'failed'),
-
         equal: createAssert('equal', 2, 'should equal'),
         notEqual: createAssert('notEqual', 2, 'should notEqual'),
         deepEqual: createAssert('deepEqual', 2, 'should deepEqual'),

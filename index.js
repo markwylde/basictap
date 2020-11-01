@@ -1,3 +1,4 @@
+const tape = require('tape');
 const runner = require('./runner');
 
 const tests = {};
@@ -6,5 +7,11 @@ module.exports = function (name, job) {
 };
 
 process.nextTick(() => {
-  runner(tests);
+  if (process.argv[2] === 'tape') {
+    Object.keys(tests).forEach(key => {
+      tape(key, tests[key]);
+    });
+  } else {
+    runner(tests);
+  }
 });

@@ -3,7 +3,7 @@ const test = require('../');
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 test('basic test that passes', t => {
-  t.plan(4);
+  t.plan(3);
 
   t.equal(1, 1);
   t.equal(1, 1);
