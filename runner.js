@@ -6,7 +6,7 @@ function indent (spaces, text) {
   }).join('\n');
 }
 
-function runner (tests) {
+function runner (tests, callback) {
   console.log('TAP version 13');
 
   let totalAssertions = 0;
@@ -113,6 +113,8 @@ function runner (tests) {
       console.log(`# tests ${totalAssertions}`);
       console.log(`# pass  ${totalPassed}`);
       console.log(`# fail  ${totalFailed}`);
+
+      callback && callback();
 
       if (totalFailed > 0) {
         process.exit(1);
