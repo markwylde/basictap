@@ -2,7 +2,7 @@ const righto = require('righto');
 const assert = require('assert');
 const { inspect } = require('util');
 
-function waitUntil (fn, callback) {
+function waitUntil (timeout, fn, callback) {
   const result = fn();
 
   if (result) {
@@ -10,7 +10,12 @@ function waitUntil (fn, callback) {
     return;
   }
 
-  setTimeout(() => waitUntil(fn, callback), 50);
+  if (timeout < 0) {
+    callback(new Error('waitUntil timed out'));
+    return;
+  }
+
+  setTimeout(() => waitUntil(timeout - 50, fn, callback), 50);
 }
 
 function indent (spaces, text) {
@@ -33,6 +38,7 @@ function runner (tests, callback) {
     .map(testName => righto(done => {
       testsTotal = testsTotal + 1;
 
+      let currentTimeout = 5000;
       let fails = 0;
       let passes = 0;
       let asserted = 0;
@@ -82,6 +88,10 @@ function runner (tests, callback) {
           assertionsPlanned = count;
         },
 
+        timeout: (ms) => {
+          currentTimeout = ms;
+        },
+
         pass: createAssert(null, 0, 'passed'),
         fail: createAssert('fail', 0, 'failed'),
         ok: createAssert('ok', 0, 'ok'),
@@ -102,7 +112,7 @@ function runner (tests, callback) {
         doesNotMatch: createAssert('doesNotMatch', 2, 'should doesNotMatch')
       });
 
-      waitUntil(() => assertionsPlanned === asserted, function (error) {
+      waitUntil(currentTimeout, () => assertionsPlanned === asserted, function (error) {
         if (error) {
           totalAssertions = totalAssertions + 1;
           asserted = asserted + 1;
