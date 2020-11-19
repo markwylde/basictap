@@ -1,5 +1,17 @@
+const righto = require('righto');
 const assert = require('assert');
 const { inspect } = require('util');
+
+function waitUntil (fn, callback) {
+  const result = fn();
+
+  if (result) {
+    callback();
+    return;
+  }
+
+  setTimeout(() => waitUntil(fn, callback), 50);
+}
 
 function indent (spaces, text) {
   return text.split('\n').map(line => {
@@ -18,7 +30,7 @@ function runner (tests, callback) {
   let testsTotal = 0;
 
   const results = Object.keys(tests)
-    .map(testName => {
+    .map(testName => righto(done => {
       testsTotal = testsTotal + 1;
 
       let fails = 0;
@@ -90,8 +102,8 @@ function runner (tests, callback) {
         doesNotMatch: createAssert('doesNotMatch', 2, 'should doesNotMatch')
       });
 
-      function finish () {
-        if (assertionsPlanned !== asserted) {
+      waitUntil(() => assertionsPlanned === asserted, function (error) {
+        if (error) {
           totalAssertions = totalAssertions + 1;
           asserted = asserted + 1;
           fails = fails + 1;
@@ -105,27 +117,20 @@ function runner (tests, callback) {
         } else {
           testsPassed = testsPassed + 1;
         }
-      }
 
-      if (result && result.then) {
-        result.then(finish);
-      } else {
-        finish();
-      }
+        done(null, result);
+      });
+    }));
 
-      return result;
-    });
+  righto.all(results)(() => {
+    console.log('');
+    console.log('1..3');
+    console.log(`# tests ${totalAssertions}`);
+    console.log(`# pass  ${totalPassed}`);
+    console.log(`# fail  ${totalFailed}`);
 
-  Promise.all(results)
-    .then(() => {
-      console.log('');
-      console.log('1..3');
-      console.log(`# tests ${totalAssertions}`);
-      console.log(`# pass  ${totalPassed}`);
-      console.log(`# fail  ${totalFailed}`);
-
-      callback && callback(null, { totalFailed, totalPassed, totalAssertions, testsTotal });
-    });
+    callback && callback(null, { totalFailed, totalPassed, totalAssertions, testsTotal });
+  });
 }
 
 module.exports = runner;
