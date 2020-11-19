@@ -25,7 +25,7 @@ process.nextTick(() => {
       tape(key, tests[key]);
     });
   } else {
-    const enabledTests = [];
+    const enabledTests = {};
     Object.keys(tests)
       .forEach(key => {
         if (only.length > 0 && !only.includes(key)) {
@@ -35,7 +35,7 @@ process.nextTick(() => {
           return false;
         }
 
-        enabledTests.push(tests[key]);
+        enabledTests[key] = tests[key];
       });
 
     runner(enabledTests, () => {

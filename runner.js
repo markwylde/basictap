@@ -38,7 +38,7 @@ function runner (tests, callback) {
           totalAssertions = totalAssertions + 1;
           asserted = asserted + 1;
           try {
-            assert.strict[name](...args);
+            name && assert.strict[name](...args);
             passes = passes + 1;
             totalPassed = totalPassed + 1;
             log(`ok ${totalAssertions} ${args[argumentCount] || defaultComment}`);
@@ -48,8 +48,8 @@ function runner (tests, callback) {
             log(`not ok ${totalAssertions} ${args[argumentCount] || defaultComment}`);
             log(indent(3, '---'));
             log(indent(5, 'operator: ' + name));
-            log(indent(5, 'expected: ' + args[1]));
-            log(indent(5, 'actual:   ' + args[0]));
+            log(indent(5, 'expected: ' + JSON.stringify(args[1])));
+            log(indent(5, 'actual:   ' + JSON.stringify(args[0])));
             log(indent(5, 'message:  ' + JSON.stringify(error.message)));
             log(indent(5, 'stack: |-'));
             log(indent(8, error.stack));
@@ -63,6 +63,7 @@ function runner (tests, callback) {
           assertionsPlanned = count;
         },
 
+        pass: createAssert(null, 0, 'passed'),
         fail: createAssert('fail', 0, 'failed'),
         equal: createAssert('equal', 2, 'should equal'),
         notEqual: createAssert('notEqual', 2, 'should notEqual'),
