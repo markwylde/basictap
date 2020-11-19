@@ -34,6 +34,23 @@ function runner (tests, callback) {
   let testsFailed = 0;
   let testsTotal = 0;
 
+  let staggered = 0;
+  function stagger (limit) {
+    return righto(done => {
+      function attempt () {
+        if (staggered < limit) {
+          staggered = staggered + 1;
+          done();
+          return;
+        }
+
+        setTimeout(attempt, 60);
+      }
+
+      attempt();
+    });
+  }
+
   const results = Object.keys(tests)
     .map(testName => righto(done => {
       testsTotal = testsTotal + 1;
@@ -128,9 +145,10 @@ function runner (tests, callback) {
           testsPassed = testsPassed + 1;
         }
 
+        staggered = staggered - 1;
         done(null, result);
       });
-    }));
+    }, righto.after(stagger(process.env.STAGGER || 5))));
 
   righto.all(results)(() => {
     console.log('');
