@@ -1,4 +1,5 @@
 const assert = require('assert');
+const { inspect } = require('util');
 
 function indent (spaces, text) {
   return text.split('\n').map(line => {
@@ -38,7 +39,13 @@ function runner (tests, callback) {
           totalAssertions = totalAssertions + 1;
           asserted = asserted + 1;
           try {
-            name && assert.strict[name](...args);
+            if (name) {
+              if (typeof name === 'function') {
+                name(...args);
+              } else {
+                assert.strict[name](...args);
+              }
+            }
             passes = passes + 1;
             totalPassed = totalPassed + 1;
             log(`ok ${totalAssertions} ${args[argumentCount] || defaultComment}`);
@@ -48,9 +55,9 @@ function runner (tests, callback) {
             log(`not ok ${totalAssertions} ${args[argumentCount] || defaultComment}`);
             log(indent(3, '---'));
             log(indent(5, 'operator: ' + name));
-            log(indent(5, 'expected: ' + JSON.stringify(args[1])));
-            log(indent(5, 'actual:   ' + JSON.stringify(args[0])));
-            log(indent(5, 'message:  ' + JSON.stringify(error.message)));
+            log(indent(5, 'expected: ' + inspect(args[1], { breakLength: Infinity })));
+            log(indent(5, 'actual:   ' + inspect(args[0], { breakLength: Infinity })));
+            log(indent(5, 'message:  ' + inspect(error.message, { breakLength: Infinity })));
             log(indent(5, 'stack: |-'));
             log(indent(8, error.stack));
             log(indent(3, '...'));
@@ -65,6 +72,8 @@ function runner (tests, callback) {
 
         pass: createAssert(null, 0, 'passed'),
         fail: createAssert('fail', 0, 'failed'),
+        ok: createAssert('ok', 0, 'ok'),
+        notOk: createAssert((actual) => assert.strict.equal(!!actual, false), 0, 'notOk'),
         equal: createAssert('equal', 2, 'should equal'),
         notEqual: createAssert('notEqual', 2, 'should notEqual'),
         deepEqual: createAssert('deepEqual', 2, 'should deepEqual'),
@@ -115,13 +124,7 @@ function runner (tests, callback) {
       console.log(`# pass  ${totalPassed}`);
       console.log(`# fail  ${totalFailed}`);
 
-      callback && callback();
-
-      if (totalFailed > 0) {
-        process.exit(1);
-      } else {
-        process.exit(0);
-      }
+      callback && callback(null, { totalFailed, totalPassed, totalAssertions, testsTotal });
     });
 }
 

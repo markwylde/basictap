@@ -1,4 +1,6 @@
 const tape = require('tape');
+const chalk = require('chalk');
+
 const runner = require('./runner');
 
 const tests = {};
@@ -38,9 +40,20 @@ process.nextTick(() => {
         enabledTests[key] = tests[key];
       });
 
-    runner(enabledTests, () => {
-      console.log('# skipped', skip.length);
-      only.length && console.log('# only', only.length);
+    runner(enabledTests, (_, { totalFailed }) => {
+      console.log('# skip  ' + skip.length);
+      only.length && console.log('# only  ' + only.length);
+
+      if (only.length > 0 || skip.length > 0) {
+        console.log(chalk.yellowBright('\n** you are not running all your tests **'));
+      }
+
+      if (totalFailed > 0) {
+        console.log(chalk.redBright(`\n${totalFailed} tests failed`));
+        process.exit(1);
+      } else {
+        process.exit(0);
+      }
     });
   }
 });
