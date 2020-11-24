@@ -1,8 +1,8 @@
 # basictap
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/markwylde/basictap)
-[![GitHub package.json version](https://img.shields.io/github/package-json/v/markwylde/basictap)](https://github.com/markwylde/basictap/blob/master/package.json)
-[![GitHub](https://img.shields.io/github/license/markwylde/basictap)](https://github.com/markwylde/basictap/blob/master/LICENSE)
-[![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg)](https://github.com/standard/semistandard)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/markwylde/basictap?style=flat-square)
+[![GitHub package.json version](https://img.shields.io/github/package-json/v/markwylde/basictap?style=flat-square)](https://github.com/markwylde/basictap/blob/master/package.json)
+[![GitHub](https://img.shields.io/github/license/markwylde/basictap?style=flat-square)](https://github.com/markwylde/basictap/blob/master/LICENSE)
+[![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/standard/semistandard)
 
 Light tap adherent test runner.
 
