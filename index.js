@@ -18,6 +18,8 @@ createTest.only = function (name, job) {
   only.push(name);
 };
 
+createTest.maximumConcurrentTests = 5;
+
 module.exports = createTest;
 
 process.nextTick(() => {
@@ -34,7 +36,7 @@ process.nextTick(() => {
       enabledTests[key] = tests[key];
     });
 
-  runner(enabledTests, (_, { totalAssertionsFailed }) => {
+  runner(enabledTests, { maximumConcurrentTests: createTest.maximumConcurrentTests }, (_, { totalAssertionsFailed }) => {
     console.log('# skip  ' + skip.length);
     only.length && console.log('# only  ' + only.length);
 

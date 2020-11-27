@@ -22,8 +22,10 @@ function createLogger () {
   };
 }
 
-function runner (tests, callback) {
+function runner (tests, options, callback) {
   console.log('TAP version 13');
+
+  options.maximumConcurrentTests = options.maximumConcurrentTests || 5;
 
   const scope = {
     testsToRun: Object.keys(tests).length,
@@ -135,7 +137,7 @@ function runner (tests, callback) {
     });
   }
 
-  const limitedRunner = concurrencyLimit(5);
+  const limitedRunner = concurrencyLimit(options.maximumConcurrentTests);
   const limitedTestRunner = limitedRunner(testRunner);
   const finished = righto.all(Object.keys(tests).map(testName =>
     righto(limitedTestRunner, testName)
@@ -149,7 +151,7 @@ function runner (tests, callback) {
     console.log(`# fail  ${scope.totalAssertionsFailed}`);
 
     callback && callback(null, scope);
-  })
+  });
 }
 
 module.exports = runner;
