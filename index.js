@@ -18,7 +18,7 @@ createTest.only = function (name, job) {
   only.push(name);
 };
 
-createTest.maximumConcurrentTests = 5;
+createTest.maximumConcurrentTests = 1;
 
 module.exports = createTest;
 
