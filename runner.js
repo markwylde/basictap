@@ -98,14 +98,15 @@ function runner (tests, callback) {
         return;
       }
 
-      done();
-
       process.stdout.write(getLogData());
+
       if (currentFails > 0) {
         scope.testsFailed = scope.testsFailed + 1;
       } else {
         scope.testsPassed = scope.testsPassed + 1;
       }
+
+      done();
     }
 
     job({
