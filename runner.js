@@ -2,6 +2,7 @@ const assert = require('assert');
 const { inspect } = require('util');
 
 const concurrencyLimit = require('concurrun');
+const righto = require('righto');
 
 function indent (spaces, text) {
   return text.split('\n').map(line => {
@@ -105,16 +106,6 @@ function runner (tests, callback) {
       } else {
         scope.testsPassed = scope.testsPassed + 1;
       }
-
-      if (scope.testsFinished === scope.testsToRun) {
-        console.log('');
-        console.log('1..3');
-        console.log(`# tests ${scope.totalAssertions}`);
-        console.log(`# pass  ${scope.totalAssertionsPassed}`);
-        console.log(`# fail  ${scope.totalAssertionsFailed}`);
-
-        callback && callback(null, scope);
-      }
     }
 
     job({
@@ -145,9 +136,19 @@ function runner (tests, callback) {
 
   const limitedRunner = concurrencyLimit(5);
   const limitedTestRunner = limitedRunner(testRunner);
-  Object.keys(tests).forEach(testName => {
-    limitedTestRunner(testName, () => {});
-  });
+  const finished = righto.all(Object.keys(tests).map(testName =>
+    righto(limitedTestRunner, testName)
+  ));
+
+  finished(() => {
+    console.log('');
+    console.log('1..3');
+    console.log(`# tests ${scope.totalAssertions}`);
+    console.log(`# pass  ${scope.totalAssertionsPassed}`);
+    console.log(`# fail  ${scope.totalAssertionsFailed}`);
+
+    callback && callback(null, scope);
+  })
 }
 
 module.exports = runner;

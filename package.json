@@ -8,11 +8,12 @@
   },
   "dependencies": {
     "colorette": "^1.2.1",
-    "concurrun": "^1.1.0"
+    "concurrun": "^1.1.0",
+    "righto": "^6.1.3"
   },
   "devDependencies": {},
   "scripts": {
-    "test": ""
+    "test": "node test"
   },
   "repository": {
     "type": "git",
