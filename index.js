@@ -1,5 +1,4 @@
-const tape = require('tape');
-const chalk = require('chalk');
+const colorette = require('colorette');
 
 const runner = require('./runner');
 
@@ -22,38 +21,32 @@ createTest.only = function (name, job) {
 module.exports = createTest;
 
 process.nextTick(() => {
-  if (process.argv[2] === 'tape') {
-    Object.keys(tests).forEach(key => {
-      tape(key, tests[key]);
-    });
-  } else {
-    const enabledTests = {};
-    Object.keys(tests)
-      .forEach(key => {
-        if (only.length > 0 && !only.includes(key)) {
-          return false;
-        }
-        if (skip.includes(key)) {
-          return false;
-        }
-
-        enabledTests[key] = tests[key];
-      });
-
-    runner(enabledTests, (_, { totalFailed }) => {
-      console.log('# skip  ' + skip.length);
-      only.length && console.log('# only  ' + only.length);
-
-      if (only.length > 0 || skip.length > 0) {
-        console.log(chalk.yellowBright('\n** you are not running all your tests **'));
+  const enabledTests = {};
+  Object.keys(tests)
+    .forEach(key => {
+      if (only.length > 0 && !only.includes(key)) {
+        return false;
+      }
+      if (skip.includes(key)) {
+        return false;
       }
 
-      if (totalFailed > 0) {
-        console.log(chalk.redBright(`\n${totalFailed} tests failed`));
-        process.exit(1);
-      } else {
-        process.exit(0);
-      }
+      enabledTests[key] = tests[key];
     });
-  }
+
+  runner(enabledTests, (_, { totalAssertionsFailed }) => {
+    console.log('# skip  ' + skip.length);
+    only.length && console.log('# only  ' + only.length);
+
+    if (only.length > 0 || skip.length > 0) {
+      console.log(colorette.yellowBright('\n** you are not running all your tests **'));
+    }
+
+    if (totalAssertionsFailed > 0) {
+      console.log(colorette.redBright(`\n${totalAssertionsFailed} tests failed`));
+      process.exit(1);
+    } else {
+      process.exit(0);
+    }
+  });
 });
