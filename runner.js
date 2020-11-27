@@ -143,9 +143,11 @@ function runner (tests, callback) {
     });
   }
 
-  const run5 = concurrencyLimit(5);
-  const testRunnerCapped = run5(testRunner);
-  Object.keys(tests).map(testName => testRunnerCapped(testName, () => {}));
+  const limitedRunner = concurrencyLimit(5);
+  const limitedTestRunner = limitedRunner(testRunner);
+  Object.keys(tests).forEach(testName => {
+    limitedTestRunner(testName, () => {});
+  });
 }
 
 module.exports = runner;
