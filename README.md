@@ -19,7 +19,10 @@ npm install --save basictap
 ```javascript
 const test = require('basictap');
 
-test.maximumConcurrentTests = 1; // default is 5, setting to 1 will run only 1 at a time
+// default is 5
+// setting to 1 will run only 1 at a time
+// setting to Infinity will run all tests at once
+test.maximumConcurrentTests = 1;
 
 test('basic test that passes', t => {
   t.plan(1);
