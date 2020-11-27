@@ -36,7 +36,7 @@ function runner (tests, callback) {
     testsFailed: 0
   };
 
-  function testRunner (testName) {
+  function testRunner (testName, done) {
     scope.testsStarted = scope.testsStarted + 1;
 
     let currentFails = 0;
@@ -97,6 +97,8 @@ function runner (tests, callback) {
         return;
       }
 
+      done();
+
       process.stdout.write(getLogData());
       if (currentFails > 0) {
         scope.testsFailed = scope.testsFailed + 1;
@@ -141,7 +143,9 @@ function runner (tests, callback) {
     });
   }
 
-  Object.keys(tests).map(concurrencyLimit(5)(testRunner));
+  const run5 = concurrencyLimit(5);
+  const testRunnerCapped = run5(testRunner);
+  Object.keys(tests).map(testName => testRunnerCapped(testName, () => {}));
 }
 
 module.exports = runner;
