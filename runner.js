@@ -143,7 +143,7 @@ function runner (tests, options, callback) {
     righto(limitedTestRunner, testName)
   ));
 
-  keepAlive = setTimeout(() => {}, 999999999);
+  const keepAlive = setTimeout(() => {}, 999999999);
   finished(() => {
     clearTimeout(keepAlive);
     console.log('');

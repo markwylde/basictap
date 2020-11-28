@@ -5,7 +5,6 @@ test('assertions', t => {
   t.ok(true);
 });
 
-
 test('no assertions', t => {
   t.plan(1);
 });
