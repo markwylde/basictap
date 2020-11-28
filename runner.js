@@ -143,7 +143,9 @@ function runner (tests, options, callback) {
     righto(limitedTestRunner, testName)
   ));
 
+  keepAlive = setTimeout(() => {}, 999999999);
   finished(() => {
+    clearTimeout(keepAlive);
     console.log('');
     console.log('1..3');
     console.log(`# tests ${scope.totalAssertions}`);
