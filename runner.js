@@ -97,7 +97,6 @@ function runner (tests, options, callback) {
         currentFails = currentFails + 1;
         scope.totalAssertionsFailed = scope.totalAssertionsFailed + 1;
         log(`not ok ${scope.totalAssertions} - expected planned assertions to be ${currentAssertionsPlanned} but got ${currentAsserted}`);
-        return;
       }
 
       process.stdout.write(getLogData());
