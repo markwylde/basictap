@@ -116,10 +116,10 @@ function runner (tests, options, callback) {
         currentAssertionsPlanned = count;
       },
 
-      pass: createAssert(finish, null, 0, 'passed'),
-      fail: createAssert(finish, 'fail', 0, 'failed'),
-      ok: createAssert(finish, 'ok', 0, 'ok'),
-      notOk: createAssert(finish, (actual) => assert.strict.equal(!!actual, false), 0, 'notOk'),
+      pass: createAssert(finish, null, 1, 'passed'),
+      fail: createAssert(finish, 'fail', 1, 'failed'),
+      ok: createAssert(finish, 'ok', 1, 'ok'),
+      notOk: createAssert(finish, (actual) => assert.strict.equal(!!actual, false), 1, 'notOk'),
       equal: createAssert(finish, 'equal', 2, 'should equal'),
       notEqual: createAssert(finish, 'notEqual', 2, 'should notEqual'),
       deepEqual: createAssert(finish, 'deepEqual', 2, 'should deepEqual'),
