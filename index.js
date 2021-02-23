@@ -47,8 +47,6 @@ process.nextTick(() => {
     if (totalAssertionsFailed > 0) {
       console.log(colorette.redBright(`\n${totalAssertionsFailed} tests failed`));
       process.exit(1);
-    } else {
-      process.exit(0);
     }
   });
 });
